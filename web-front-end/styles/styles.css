@@ -113,3 +113,16 @@ button:hover {
 .actions button:last-child:hover{
     background-color: rgb(199, 39, 39);
 }
+
+.danger{
+    background-color: red;
+    margin-top: 10px;
+}
+.danger:hover{
+    background-color: rgb(199, 39, 39);
+}
+
+/* a{
+    text-decoration: none;
+    color: white;
+} */

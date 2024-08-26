@@ -4,9 +4,10 @@ const config = process.env;
 
 const tokenVerification = (req, res, next) => {
   let token = req.body.token || req.query.token || req.headers["x-access-token"] || req?.signedCookies?.user?.token;
+  console.log("Token: ", token);
   if (!token) {
     return res.status(403).send({
-      auth: false,
+      auth: true,
       message: "Token is not provided.",
       status: 403
     });

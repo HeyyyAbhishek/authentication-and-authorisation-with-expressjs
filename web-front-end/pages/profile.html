@@ -1,68 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile</title>
-    <link rel="stylesheet" href="../styles/styles.css">
-</head>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
 
-<body>
+  <body>
     <h1>User Profile</h1>
     <form id="profile-form">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="contact_number">Contact Number:</label>
-        <input type="tel" id="contact_number" name="contact_number" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <br>
-        <button type="submit">Update Profile</button>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+      <br />
+      <label for="contact_number">Contact Number:</label>
+      <input type="tel" id="contact_number" name="contact_number" required />
+      <br />
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <br />
+      <button type="submit">Update Profile</button>
+      <button type="button" class="danger">
+        Delete Me
+      </button>
+      <button onclick="redirect()" type="button" class="danger">
+        <a style="text-decoration: none;color: white;" href="./userList.html">All User</a>
+      </button>
     </form>
 
     <script>
-        async function loadUserProfile() {
-            const response = await fetch('http://127.0.0.1:4001/auth/user',{
-                credentials:"include"
-            });
-            const user = (await response.json())?.payload;
-            if (!user) {
-                alert('Failed to load user profile');
-                window.location.href = './index.html';
-                return
-            }
-            document.getElementById('username').value = user.username;
-            document.getElementById('contact_number').value = user.contact_number;
-            document.getElementById('email').value = user.email;
+      async function loadUserProfile() {
+        const response = await fetch("http://127.0.0.1:4001/auth/user", {
+          credentials: "include",
+        });
+        const user = (await response.json())?.payload;
+        if (!user) {
+          alert("Failed to load user profile");
+          window.location.href = "./index.html";
+          return;
         }
+        document.getElementById("username").value = user.username;
+        document.getElementById("contact_number").value = user.contact_number;
+        document.getElementById("email").value = user.email;
+      }
 
-        document.getElementById('profile-form').addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const contact_number = document.getElementById('contact_number').value;
-            const email = document.getElementById('email').value;
-            const response = await fetch('http://127.0.0.1:4001/auth/user', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, contact_number }),
-                credentials: "include"
-
-            });
-            const result = await response.json();
-            // handle response
-            if (result.ok) {
-                alert('Profile updated successfully');
-                return;
-            }else{
-                alert(result.message);
-            }
+      document
+        .getElementById("profile-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const username = document.getElementById("username").value;
+          const contact_number =
+            document.getElementById("contact_number").value;
+          const email = document.getElementById("email").value;
+          const response = await fetch("http://127.0.0.1:4001/auth/user", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, contact_number }),
+            credentials: "include",
+          });
+          const result = await response.json();
+          // handle response
+          if (result.ok) {
+            alert("Profile updated successfully");
+            return;
+          } else {
+            alert(result.message);
+          }
         });
 
-        loadUserProfile();
-    </script>
-</body>
+      window.addEventListener("load", loadUserProfile);
 
+      function redirect() {
+        window.location.href = "./userList.html";
+      }
+      let deleteMe = document.getElementsByTagName("button")[1];
+
+        deleteMe.addEventListener("click", async (ev) => {
+          ev.preventDefault();
+          let username = ev.target.parentElement.querySelector("#username")
+            .value;
+            let email = ev.target.parentElement.querySelector("#email").value;
+          let confirmDelete = confirm(
+            "Are you sure ? you want to delete your account"
+          );
+          try{
+            if (confirmDelete) {
+            const response = await fetch(
+              `http://127.0.0.1:4001/auth/user/id/${username}`,
+              {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  username,
+                  email,
+                }),
+                credentials: "include",
+              }
+            );
+            const result = await response.json();
+
+            console.log(result);
+
+            if (result.ok) {
+              alert("Your account has been deleted successfully");
+              window.location.href = "./index.html";
+              
+            } else {
+              alert("Your delete request failed");
+            }
+          }
+          }catch(error){
+            console.error("Error deleting account:", error);
+            alert("An error occurred while deleting your account. Please try again.");
+          }
+
+        });
+      
+    </script>
+  </body>
 </html>
