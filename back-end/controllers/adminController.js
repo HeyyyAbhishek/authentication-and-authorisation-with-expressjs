@@ -73,7 +73,7 @@ const update_user_profile = async (req, res) => {
 
 const delete_user_profile = async (req, res) => {
     try {
-        let user_id = req.params.user_id
+        let user_id = req.params.user_id || req.body.username
 
         let user = await UserModel.findOne({ where: { id: user_id } })
 
