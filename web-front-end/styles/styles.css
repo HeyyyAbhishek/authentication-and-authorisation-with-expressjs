@@ -126,3 +126,7 @@ button:hover {
     text-decoration: none;
     color: white;
 } */
+ p{
+  display: flex;
+    justify-content: center;
+ }
