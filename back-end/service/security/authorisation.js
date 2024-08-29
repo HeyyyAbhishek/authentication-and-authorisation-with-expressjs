@@ -7,7 +7,7 @@ const authorisation = (role) => {
     return (req, res, next) => {
         let user = req.signedCookies;
         const xAccessToken = user?.user?.token;
-		//console.log("Access Token", xAccessToken);
+		console.log("Access Token", xAccessToken);
 		if (xAccessToken) {
 			const decoded = jwt.verify(xAccessToken, config.TOKEN_KEY);
 			user = decoded.user.account_type;
@@ -15,7 +15,6 @@ const authorisation = (role) => {
 				return next();
 			}
 		}
-		
 		return res.status(401).send({
 			auth: false,
 			message: "You are not authorised to access this page.",

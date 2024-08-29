@@ -13,6 +13,7 @@ router.post('/register', (req, res) => authController.register(req, res))
 
 router.get('/user', authentication, authorisation("user"), (req, res) => authController.load_user_profile(req, res))
 router.put('/user', authentication, authorisation("user"), (req, res) => authController.update_user_profile(req, res))
-router.get('/user/userList',authentication, (req, res) => authController.all_user_profile(req, res))
-router.delete('/user/id/:user_id',authentication, (req, res) => authController.delete_user_profile(req, res))
+router.get('/user/userList',authentication,authorisation("user"), (req, res) => authController.all_user_profile(req, res))
+router.delete('/user/id/:user_id',authentication,authorisation("user"), (req, res) => authController.delete_user_profile(req, res))
+
 module.exports = router;

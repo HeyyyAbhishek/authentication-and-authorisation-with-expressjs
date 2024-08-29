@@ -179,7 +179,6 @@ const update_user_profile = async (req, res) => {
 const all_user_profile = async (req, res) => {
   try {
     let user = await UserModel.findAll({
-      where: { account_type: "user" },
       attributes: { exclude: ["password", "salt"] },
     }).then((user) => user.map((user) => user.dataValues));
 
@@ -197,11 +196,14 @@ const delete_user_profile = async (req, res) => {
     let user = await UserModel.findOne({
       where: { username: user_id },
     });
+    
     let account_type = await UserModel.findOne({
       where: { username: user_id },
       attributes: ["account_type"],
-    });
+    }).then(account_type => account_type.dataValues.account_type);
 
+    console.log(account_type)
+    
     if (!user) {
       return res.status(400).send({
         ok: false,

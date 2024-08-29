@@ -14,6 +14,7 @@
           <th>ID</th>
           <th>Email</th>
           <th>Actions</th>
+          <th>Role</th>
         </tr>
       </thead>
       <tbody>
@@ -44,6 +45,12 @@
           row.insertCell(0).innerText = index + 1;
           row.insertCell(1).innerText = user.email;
           const actionsCell = row.insertCell(2);
+          const role = row.insertCell(3)
+          
+
+          const pg  = document.createElement("p");
+          pg.innerText = user.account_type.toUpperCase();
+          role.appendChild(pg);
 
           const deleteButton = document.createElement("button");
           deleteButton.innerText = "Delete";
@@ -71,10 +78,10 @@
               const result = await response.json();
               console.log(result);
               if (result.ok) {
-                alert("User deleted successfully");
+                alert(result.message);
                 loadUsers();
               } else {
-                alert("User delete failed");
+                alert(result.message);
               }
             }
           };
@@ -82,6 +89,7 @@
           actionsCell.appendChild(deleteButton);
         });
       }
+      
 
       loadUsers();
     </script>
